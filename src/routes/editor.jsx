@@ -127,8 +127,8 @@ export default function Editor() {
     );
   }
   const isEdited =
-    String(selector?.content).trim() !== markdown.trim() ||
-    String(selector?.name).trim() !== name.trim();
+    String(selector?.content).trim() !== markdown?.trim() ||
+    String(selector?.name).trim() !== name?.trim();
   useEffect(() => {
     if (isEdited && drawerState === "opened") {
       setDrawerState("closed");
@@ -136,10 +136,10 @@ export default function Editor() {
   }, [isEdited]);
   useEffect(() => {
     if (loaderState === "success") {
-      setMarkdown(selector.content);
-      setName(selector.name);
+      setMarkdown(selector?.content);
+      setName(selector?.name);
     }
-  }, [loaderState, selector]);
+  }, [loaderState, selector?.content, selector?.name]);
   return (
     <section className="flex max-h-screen min-w-[375px] flex-col items-stretch overflow-hidden md:w-screen">
       <editorStateContext.Provider
