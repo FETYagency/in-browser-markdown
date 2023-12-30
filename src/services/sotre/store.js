@@ -1,8 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import documentsSlice from "./features/documents";
-const store = configureStore({
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist-indexeddb-storage";
+import { thunk } from "redux-thunk";
+const persistConfig = {
+  key: "root",
+  storage: storage("myDB"),
+};
+const persistedReducer = persistReducer(persistConfig, documentsSlice);
+export const store = configureStore({
   reducer: {
-    documents: documentsSlice,
+    documents: persistedReducer,
   },
+  middleware: (getDefaultMiddleware) => [thunk],
 });
-export default store;
+export const persistor = persistStore(store);

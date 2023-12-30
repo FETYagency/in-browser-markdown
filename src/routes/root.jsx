@@ -11,7 +11,6 @@ export async function action({ request }) {
 }
 export default function Root() {
   let { docId } = useParams();
-  console.log(docId);
   let [drawerState, setDrawerState] = useState("opened");
   const handleToggle = useCallback(() => {
     setDrawerState((prev) => {

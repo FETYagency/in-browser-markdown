@@ -2,7 +2,7 @@ import Header from "../components/header";
 import Typo from "../components/ui/typography";
 import showPreview from "../assets/icon-show-preview.svg";
 import hidePreview from "../assets/icon-hide-preview.svg";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useScreenQuery from "../services/hooks/useScreenQuery";
 import Markdown from "react-markdown";
 import { useParams } from "react-router-dom";
@@ -12,10 +12,11 @@ import {
   loaderStateSelector,
   selectDocumentById,
 } from "../services/sotre/features/documents";
+import LF from "localforage";
 import drawerStateContext from "../services/providers/drawerStateHandlers";
 
 export default function Editor() {
-  const { setDrawerState, drawerState } = useContext(drawerStateContext);
+  const { setDrawerState } = useContext(drawerStateContext);
   let { docId } = useParams();
   let selector = useSelector((state) => selectDocumentById(state, docId));
   let loaderState = useSelector((state) => loaderStateSelector(state));
@@ -130,10 +131,10 @@ export default function Editor() {
     String(selector?.content).trim() !== markdown?.trim() ||
     String(selector?.name).trim() !== name?.trim();
   useEffect(() => {
-    if (isEdited && drawerState === "opened") {
-      setDrawerState("closed");
+    if (isEdited) {
+      setDrawerState((prev) => (prev === "opened" ? "closed" : prev));
     }
-  }, [isEdited]);
+  }, [isEdited, setDrawerState]);
   useEffect(() => {
     if (loaderState === "success") {
       setMarkdown(selector?.content);

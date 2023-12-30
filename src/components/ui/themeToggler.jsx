@@ -5,7 +5,7 @@ import useMediaQuery from "../../services/hooks/useThemeQuery";
 
 export default function ThemeToggler({ className = "" }) {
   const { toggleDark, toggleLight, api } = useMediaQuery(
-    "(prefers-color-scheme:dark)"
+    "(prefers-color-scheme:dark)",
   );
   const toggler = useRef(null);
   let [isChecked, setIsChecked] = useState(api);
@@ -18,13 +18,13 @@ export default function ThemeToggler({ className = "" }) {
     } else {
       toggleDark();
     }
-  }, [isChecked]);
+  }, [isChecked, toggleDark, toggleLight]);
   return (
     <div
-      className={"flex items-center flex-row-reverse gap-[12px] " + className}
+      className={"flex flex-row-reverse items-center gap-[12px] " + className}
     >
       <span
-        className={`dark:text-light-100 text-white`}
+        className={`text-white dark:text-light-100`}
         onClick={() => setIsChecked(false)}
       >
         <LightSvg />
@@ -35,12 +35,12 @@ export default function ThemeToggler({ className = "" }) {
           checked={isChecked}
           id="target"
           type="checkbox"
-          onChange={(e) => setIsChecked((prev) => !prev)}
-          className="absolute opacity-0 pointer-events-none w-[0px] h-[0px]"
+          onChange={() => setIsChecked((prev) => !prev)}
+          className="pointer-events-none absolute h-[0px] w-[0px] opacity-0"
         />
-        <div className="h-[24px] w-[48px] bg-light-100 rounded-[14px] px-[6px] flex items-center">
-          <div className="h-[12px] w-full flex justify-end dark:justify-start">
-            <div className="h-full aspect-square bg-white rounded-full"></div>
+        <div className="flex h-[24px] w-[48px] items-center rounded-[14px] bg-light-100 px-[6px]">
+          <div className="flex h-[12px] w-full justify-end dark:justify-start">
+            <div className="aspect-square h-full rounded-full bg-white"></div>
           </div>
         </div>
       </label>

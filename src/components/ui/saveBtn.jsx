@@ -19,7 +19,7 @@ export default function SaveBtn() {
   async function handleClick() {
     try {
       setLoader("pending");
-      const unwarpper = await dispatch(
+      await dispatch(
         updateDocument({ docId, name, content: markdown }),
       ).unwrap();
       setLoader("success");

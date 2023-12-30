@@ -5,7 +5,6 @@ export default function useScreenQuery(mediaFeature) {
     throw new Error(
       "you need to specify the media feature for the 'useScreenQuery'",
     );
-    return;
   }
   const media = matchMedia(mediaFeature);
   function subscriber(callback) {

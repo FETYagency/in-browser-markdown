@@ -1,11 +1,10 @@
-import { useSyncExternalStore } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 export default function useMediaQuery(mediaFeature) {
   if (!mediaFeature) {
     throw new Error(
-      "you need to specify the media feature for the 'useMediaQuery'"
+      "you need to specify the media feature for the 'useMediaQuery'",
     );
-    return;
   }
   const media = matchMedia(mediaFeature);
   const html = window.document.documentElement;
@@ -19,11 +18,17 @@ export default function useMediaQuery(mediaFeature) {
     return media.matches;
   }
   const api = useSyncExternalStore(subscriber, getSnapshot);
-  function toggleDark() {
-    html.classList.add("dark");
-  }
-  function toggleLight() {
-    html.classList.remove("dark");
-  }
+  const toggleDark = useCallback(
+    function () {
+      html.classList.add("dark");
+    },
+    [html.classList],
+  );
+  const toggleLight = useCallback(
+    function () {
+      html.classList.remove("dark");
+    },
+    [html.classList],
+  );
   return { toggleDark, toggleLight, api };
 }

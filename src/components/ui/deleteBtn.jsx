@@ -3,16 +3,19 @@ import deleteSvg from "../../assets/icon-delete.svg";
 import { deleteDocument } from "../../services/sotre/features/documents";
 import { useContext } from "react";
 import { editorStateContext } from "../../services/providers/editorState";
-import { useSubmit } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function DeleteBtn() {
   const dispatch = useDispatch();
-  const submit = useSubmit();
+  const navigate = useNavigate();
   const { docId } = useContext(editorStateContext);
-  async function handleClick(e) {
+  async function handleClick() {
     try {
-      const unwrapper = await dispatch(deleteDocument({ docId })).unwrap();
-      submit({ id: "" }, { method: "POST" });
-    } catch (error) {}
+      await dispatch(deleteDocument({ docId })).unwrap();
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <button

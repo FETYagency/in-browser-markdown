@@ -3,13 +3,25 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { compareAsc, compareDesc } from "date-fns";
+import { compareDesc } from "date-fns";
 
-export const fetchDocuments = createAsyncThunk("fetchDoocuments", async () => {
-  const request = await fetch("/apiMocks/documents", { method: "GET" });
-  const resp = await request.json();
-  return resp;
-});
+export const fetchDocuments = createAsyncThunk(
+  "fetchDoocuments",
+  async (persistedData) => {
+    const enteties = Object.values(persistedData);
+    let request;
+    if (enteties.length > 0) {
+      request = await fetch("/apiMocks/sync/documents", {
+        method: "POST",
+        body: JSON.stringify(enteties),
+      });
+    } else {
+      request = await fetch("/apiMocks/documents", { method: "GET" });
+    }
+    const resp = await request.json();
+    return resp;
+  },
+);
 export const deleteDocument = createAsyncThunk(
   "deleteDocument",
   async ({ docId }) => {
@@ -48,7 +60,7 @@ const documents = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDocuments.pending, (state, action) => {
+      .addCase(fetchDocuments.pending, (state) => {
         state.loader = "pending";
       })
       .addCase(fetchDocuments.fulfilled, (state, action) => {

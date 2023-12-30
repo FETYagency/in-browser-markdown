@@ -10,7 +10,7 @@ import { selectAllDocuments } from "../services/sotre/features/documents";
 import { formatISO9075 } from "date-fns";
 
 export default function Drawer({ drawerState }) {
-  const { handleToggle, setDrawerState } = useContext(drawerStateContext);
+  const { setDrawerState } = useContext(drawerStateContext);
   const selector = useSelector((state) => selectAllDocuments(state));
   let renderedList;
   if (selector.length > 0) {
