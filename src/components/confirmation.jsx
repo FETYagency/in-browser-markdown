@@ -8,8 +8,8 @@ export default function Confirm({ docName }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let [loader, setLoader] = useState("idle");
-  const { docId } = useContext(editorStateContext);
-  async function handleClick() {
+  const { docId, setConfirm } = useContext(editorStateContext);
+  async function handleClick(e) {
     try {
       setLoader("pending");
       await dispatch(deleteDocument({ docId })).unwrap();
@@ -20,7 +20,10 @@ export default function Confirm({ docName }) {
     }
   }
   return (
-    <div className="fixed inset-0 grid place-items-center bg-dark-100/50 dark:bg-white/50">
+    <div
+      className="fixed inset-0 grid place-items-center bg-dark-100/50 dark:bg-white/50"
+      onClick={() => setConfirm(false)}
+    >
       <article className="grid w-full max-w-[343px] gap-[16px] rounded-[4px] bg-white p-[24px] dark:bg-dark-200">
         <h1 className="text-[20px] font-bold leading-normal text-dark-400 dark:text-white">
           Delete this document?
