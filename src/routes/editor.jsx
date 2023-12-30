@@ -14,6 +14,7 @@ import {
 } from "../services/sotre/features/documents";
 import LF from "localforage";
 import drawerStateContext from "../services/providers/drawerStateHandlers";
+import Confirm from "../components/confirmation";
 
 export default function Editor() {
   const { setDrawerState } = useContext(drawerStateContext);
@@ -22,6 +23,7 @@ export default function Editor() {
   let loaderState = useSelector((state) => loaderStateSelector(state));
   let [markdown, setMarkdown] = useState("");
   let [name, setName] = useState("");
+  let [confirm, setConfirm] = useState(false);
   let [preveiwState, setPreviewState] = useState("closed");
   let { api } = useScreenQuery("(width<768px)");
   let content;
@@ -142,16 +144,19 @@ export default function Editor() {
     }
   }, [loaderState, selector?.content, selector?.name]);
   return (
-    <section className="flex max-h-screen min-w-[375px] flex-col items-stretch overflow-hidden md:w-screen">
+    <>
       <editorStateContext.Provider
-        value={{ isEdited, docId, name, setName, markdown }}
+        value={{ isEdited, docId, name, setName, markdown, setConfirm }}
       >
-        <Header />
+        {confirm && <Confirm docName={selector?.name} />}
+        <section className="flex max-h-screen min-w-[375px] flex-col items-stretch overflow-hidden md:w-screen">
+          <Header />
+          <section className="grow overflow-hidden bg-white dark:bg-dark-100">
+            {api && content}
+            {!api && content}
+          </section>
+        </section>
       </editorStateContext.Provider>
-      <section className="grow overflow-hidden bg-white dark:bg-dark-100">
-        {api && content}
-        {!api && content}
-      </section>
-    </section>
+    </>
   );
 }

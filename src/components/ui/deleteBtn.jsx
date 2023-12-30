@@ -1,26 +1,12 @@
-import { useDispatch } from "react-redux";
-import deleteSvg from "../../assets/icon-delete.svg";
-import { deleteDocument } from "../../services/sotre/features/documents";
 import { useContext } from "react";
+import deleteSvg from "../../assets/icon-delete.svg";
 import { editorStateContext } from "../../services/providers/editorState";
-import { useNavigate } from "react-router-dom";
-
 export default function DeleteBtn() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { docId } = useContext(editorStateContext);
-  async function handleClick() {
-    try {
-      await dispatch(deleteDocument({ docId })).unwrap();
-      navigate("/", { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const { setConfirm } = useContext(editorStateContext);
   return (
     <button
-      onClick={handleClick}
       className="grid aspect-square w-[40px] place-items-center rounded-[4px]"
+      onClick={() => setConfirm((prev) => !prev)}
     >
       <img src={deleteSvg} />
     </button>
